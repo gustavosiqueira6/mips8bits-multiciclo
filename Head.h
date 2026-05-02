@@ -7,6 +7,16 @@ typedef struct {
 
 } instro;
 
+typedef struct {
+    unsigned short RI;        // armazena a intrução
+    signed char    A;         // armazena rs
+    signed char    B;         // armazena rt
+    int            ULA_saida; // saida da ULA
+    signed char    RDM;       // dado lido na memoria (lw)
+} RegsInterm;
+
+void init_regs_interm(RegsInterm *rt);
+void print_regs_interm(RegsInterm *rt);
 
 typedef enum {
 
