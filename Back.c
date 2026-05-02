@@ -3,12 +3,12 @@
 #include "Head.h"
 
 
-void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULASaida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr)
+void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULA_saida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr)
 {
     if (*sp >= 499)
     {
 
-        printf("  [BACK] Pilha cheia (500 ciclos) — estado mais antigo sera perdido\n");
+        printf("  [BACK] Pilha cheia (500 ciclos) ï¿½ estado mais antigo sera perdido\n");
 
         for (int i = 0; i < 499; i++)
         {
@@ -50,7 +50,7 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
     s->overflow = overflow;
 
-    s->ULASaida = ULASaida;
+    s->ULA_saida = ULA_saida;
 
     s->RDM      = RDM;
 
@@ -70,12 +70,12 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
 }
 
-void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULASaida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr)
+void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULA_saida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr)
 {
     if (*sp < 0)
     {
 
-        printf("Nada para desfazer — pilha vazia\n");
+        printf("Nada para desfazer ï¿½ pilha vazia\n");
 
         return;
 
@@ -112,7 +112,7 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
 
     *overflow = s->overflow;
 
-    *ULASaida = s->ULASaida;
+    *ULA_saida = s->ULA_saida;
 
     *RDM      = s->RDM;
 
