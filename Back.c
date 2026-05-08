@@ -8,7 +8,7 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
     if (*sp >= 499)
     {
 
-        printf("  [BACK] Pilha cheia (500 ciclos) � estado mais antigo sera perdido\n");
+        printf("  [BACK] Pilha cheia (500 ciclos). O estado mais antigo sera perdido\n");
 
         for (int i = 0; i < 499; i++)
         {
@@ -50,7 +50,7 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
     s->overflow = overflow;
 
-    s->ULA_saida = ULA_saida;
+    s->ULASaida = ULA_saida;
 
     s->RDM      = RDM;
 
@@ -75,7 +75,7 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
     if (*sp < 0)
     {
 
-        printf("Nada para desfazer � pilha vazia\n");
+        printf("Nada para desfazer - pilha vazia\n");
 
         return;
 
@@ -112,7 +112,7 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
 
     *overflow = s->overflow;
 
-    *ULA_saida = s->ULA_saida;
+   *ULA_saida = s->ULASaida;
 
     *RDM      = s->RDM;
 
