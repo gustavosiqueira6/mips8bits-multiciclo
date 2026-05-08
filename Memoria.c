@@ -161,53 +161,68 @@ int Store(instro *mem, signed char endereco, signed char valor)
 void print_mem_unificada(instro *mem)
 {
 
-   printf("\n");
+    printf("\n");
+    printf("====================================================\n");
+    printf("              MEMORIA DE INSTRUCOES                 \n");
+    printf("====================================================\n");
+    printf(" END │ BINARIO                         │ HEXADECIMAL\n");
+    printf("----------------------------------------------------\n");
 
-    printf("====================================================\n");
-    printf("              MEMORIA DE INSTRUCOES (0-127)         \n");
-    printf("====================================================\n");
-   
     for (int i = 0; i < 128; i++)
     {
 
-            printf("  [%3d] ", i);
+        printf(" %3d │ ", i);
 
-            for (int b = 15; b >= 0; b--)
+        for (int b = 15; b >= 0; b--)
+        {
+
+            printf("%d", (mem->instc[i] >> b) & 1);
+
+            if (b == 12 || b == 8 || b == 4)
             {
-
-                printf("%d", (mem->instc[i] >> b) & 1);
-
+                printf(" ");
             }
 
-            printf(" (0x%04X)\n", mem->instc[i]);
+        }
+
+        printf(" │ 0x%04X\n", mem->instc[i]);
 
     }
 
-     printf("\n");
+    printf("====================================================\n");
 
+
+    printf("\n");
     printf("====================================================\n");
-    printf("                 MEMORIA DE DADOS (128 - 255)       \n");
+    printf("                 MEMORIA DE DADOS                   \n");
     printf("====================================================\n");
+    printf(" END │ BINARIO          │ DECIMAL\n");
+    printf("----------------------------------------------------\n");
 
     for (int i = 128; i < 256; i++)
     {
 
-            unsigned char val8 = (unsigned char)mem->instc[i];
+        unsigned char val8 = (unsigned char)mem->instc[i];
 
-            printf("  [%3d] ", i);
+        printf(" %3d │ ", i);
 
-            for (int b = 7; b >= 0; b--)
+        for (int b = 7; b >= 0; b--)
+        {
+
+            printf("%d", (val8 >> b) & 1);
+
+            if (b == 4)
             {
-
-                printf("%d", (val8 >> b) & 1);
-
+                printf(" ");
             }
 
-            printf(" (%d)\n", (signed char)val8);
+        }
+
+        printf(" │ %4d\n", (signed char)val8);
 
     }
 
-    printf("=====================================\n");
+    printf("====================================================\n");
 
 }
 

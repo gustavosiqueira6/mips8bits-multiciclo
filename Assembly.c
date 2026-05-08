@@ -3,9 +3,6 @@
 #include "Head.h"
 
 
-
-Copiar
-
 void print_asm(unsigned short instr)
 {
     unsigned char opcode = (instr >> 12) & 0xF;

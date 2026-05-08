@@ -56,10 +56,7 @@ void selecionar_arquivo(char *caminho)
 #endif
 }
 
-/* ================================================================== */
-/*  Impressao do estado atual da FSM                                  */
-/* ================================================================== */
-
+//IMpressao do estado final da FSM
 static void print_estado(int estado)
 {
     const char *nomes[] = {
@@ -87,10 +84,6 @@ static void print_estado(int estado)
     linha('-', 56);
 }
 
-/* ================================================================== */
-/*  Execucao de um ciclo de clock                                      */
-/*  (logica identica ao original — apenas printf melhorados)          */
-/* ================================================================== */
 
 int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
                   int *estado, unsigned char *PC, unsigned short *RI,
@@ -244,9 +237,6 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
     return instrucao_concluida;
 }
 
-/* ================================================================== */
-/*  Main                                                               */
-/* ================================================================== */
 
 int main(void)
 {
@@ -280,7 +270,7 @@ int main(void)
         printf("  1  — Carregar programa (.mem)\n");
         printf("  3  — Visualizar memoria (instrucoes e dados)\n");
         printf("  4  — Visualizar banco de registradores\n");
-        printf("  5  — Visualizar estado completo do simulador\n");
+        printf("  5  — Imprimir simulador\n");
         printf("  6  — Salvar programa em assembly (.asm)\n");
         linha('-', 56);
         printf("  8  — Executar programa completo (run)\n");
@@ -293,7 +283,7 @@ int main(void)
 
         switch (op)
         {
-            /* ------------------------------------------------------ */
+            
             case 1:
                 caminho[0] = '\0';
                 selecionar_arquivo(caminho);
@@ -314,48 +304,47 @@ int main(void)
                 }
                 break;
 
-            /* ------------------------------------------------------ */
             case 3:
                 titulo("MEMORIA DO SIMULADOR");
                 print_mem_unificada(&mem_unificada);
                 break;
 
-            /* ------------------------------------------------------ */
+            
             case 4:
                 titulo("BANCO DE REGISTRADORES");
                 print_regs(reg);
                 break;
 
-            /* ------------------------------------------------------ */
             case 5:
-                titulo("ESTADO COMPLETO DO SIMULADOR");
+            
+                printf("\n");
+                printf("====================================================\n");
+                printf("              ESTADO DO SIMULADOR                   \n");
+                printf("====================================================\n");
 
-                secao("Contador de Programa");
-                printf("  PC         = %d  (", PC);
+                printf(" PC                    │ %3d │ ", PC);
                 print_bin8(PC);
-                printf(")\n");
+                printf("\n");
+                printf(" Estado FSM            │ %3d\n", estado);
+                printf(" Clocks                │ %3d\n", n_ciclo);
+                printf(" Instrucoes concluidas │ %3d\n", n_instr);
 
-                secao("Maquina de Estados (FSM)");
-                printf("  Estado     = %d\n", estado);
-                printf("  Clocks     = %d\n", n_ciclo);
-                printf("  Instrucoes = %d concluidas\n", n_instr);
+                printf("----------------------------------------------------\n");
 
-                secao("Registradores Intermediarios");
-                printf("  RI         = "); print_bin(RI);
-                printf(" (0x%04X)\n", RI);
-                printf("  A          = %d\n", regA);
-                printf("  B          = %d\n", regB);
-                printf("  ULA_saida  = %d\n", ULASaida);
-                printf("  RDM        = %d\n", RDM);
+                printf(" RI        │ ");
+                print_bin(RI);
+                printf(" │ 0x%04X\n", RI);
+                printf(" RDM       │ %4d\n", RDM);
+                printf(" RegA      │ %4d\n", regA);
+                printf(" RegB      │ %4d\n", regB);
+                printf(" ULASaida  │ %4d\n", ULASaida);
 
-                secao("Banco de Registradores");
+                printf("====================================================\n");
+
                 print_regs(reg);
-
-                secao("Memoria");
                 print_mem_unificada(&mem_unificada);
                 break;
 
-            /* ------------------------------------------------------ */
             case 6:
                 titulo("SALVAR ASSEMBLY");
                 print_program(&mem_unificada, 128);
@@ -363,7 +352,6 @@ int main(void)
                 printf("\n  Arquivo salvo: programa.asm\n");
                 break;
 
-            /* ------------------------------------------------------ */
             case 8:
                 titulo("EXECUTANDO PROGRAMA COMPLETO");
                 PC      = 0;
@@ -413,7 +401,6 @@ int main(void)
                 printf("  PC final                 : %d\n", PC);
                 break;
 
-            /* ------------------------------------------------------ */
             case 9:
                 titulo("STEP — EXECUTAR UM CICLO");
                 printf("  Ciclo: %d  |  PC: %d  |  Estado FSM: %d\n",
