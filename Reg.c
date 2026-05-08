@@ -3,25 +3,27 @@
 #include <stdlib.h>
 #include "Head.h"
 
-
-
 void print_regs(signed char reg[8])
 {
 
-    printf("\n--- REGISTRADORES ---\n");
+    printf("\n");
+    printf("=====================================\n");
+    printf("         REGISTRADORES               \n");
+    printf("=====================================\n");
 
     for (int i = 0; i < 8; i++)
+
     {
 
-        printf("  R%d = ", i);
+        printf(" R%-1d │ BIN: ", i);
 
         print_bin8((unsigned char)reg[i]);
 
-        printf(" (%d)\n", reg[i]);
+        printf(" │ DEC: %4d\n", reg[i]);
 
     }
 
-    printf("---------------------\n");
+    printf("=====================================\n");
 
 }
 
@@ -50,7 +52,6 @@ int read(signed char reg[8], signed char rs, signed char rt,signed char *outA, s
 
 }
 
-
 int Rdest(int Sinais[16], signed char rd, signed char rt)
 {
 
@@ -67,7 +68,6 @@ int esc(signed char reg[8], int dest, signed char valor, int RegWrite)
         reg[dest] = valor;
 
     }
-
 
     return 0;
 }
