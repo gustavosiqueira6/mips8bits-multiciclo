@@ -74,14 +74,13 @@ void print_program(instro *mem, int tamanho)
     for (int i = 0; i < tamanho; i++)
     {
 
-        if (mem->instc[i] != 0 || i < mem->n)
-        {
+        
 
             printf("  %3d: ", i);
 
             print_asm(mem->instc[i]);
 
-        }
+        
 
     }
 
