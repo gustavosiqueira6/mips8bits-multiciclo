@@ -97,7 +97,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
 
     Estender(imm6, &immx);
     print_estado(*estado);
-    Decodifica_estado(*estado, opcode, funct, Sinais);
+    Decodifica_estado(*estado, Sinais);
 
     int instrucao_concluida = 0;
 
@@ -145,9 +145,9 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             break;
 
         case 3:
-            *RDM = (signed char)ler_unificada(mem, (unsigned char)*ULASaida + 128);
+            *RDM = (signed char)ler_unificada(mem, (unsigned char)*ULASaida);
             printf("  > Lendo dado da memoria\n");
-            printf("    RDM <- Mem[%d] = %d\n", (unsigned char)*ULASaida + 128, *RDM);
+            printf("    RDM <- Mem[%d] = %d\n", (unsigned char)*ULASaida , *RDM);
             *estado = 4;
             break;
 
@@ -163,7 +163,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             Store(mem, *ULASaida, *regB);
             printf("  > Escrevendo dado na memoria\n");
             printf("    Mem[%d] <- R%d = %d  [sw concluido]\n",
-                   (unsigned char)*ULASaida + 128, rt, *regB);
+                   (unsigned char)*ULASaida , rt, *regB);
             *estado = 0;
             instrucao_concluida = 1;
             break;
@@ -276,7 +276,7 @@ int main(void)
 
         switch (op)
         {
-            
+
             case 1:
                 caminho[0] = '\0';
                 selecionar_arquivo(caminho);
@@ -302,14 +302,14 @@ int main(void)
                 print_mem_unificada(&mem_unificada);
                 break;
 
-            
+
             case 4:
                 titulo("BANCO DE REGISTRADORES");
                 print_regs(reg);
                 break;
 
             case 5:
-            
+
                 printf("\n");
                 printf("====================================================\n");
                 printf("              ESTADO DO SIMULADOR                   \n");
