@@ -6,66 +6,113 @@
 void print_asm(unsigned short instr)
 {
     unsigned char opcode = (instr >> 12) & 0xF;
+
     unsigned char rs     = (instr >> 9)  & 0x7;
+
     unsigned char rt     = (instr >> 6)  & 0x7;
+
     unsigned char rd     = (instr >> 3)  & 0x7;
+
     unsigned char imm    = instr & 0x3F;
+
     unsigned char funct  = instr & 0x7;
+
     unsigned char addr   = instr & 0xFF;
+
     signed char   immx   = (imm & 0x20) ? (imm | 0xC0) : imm;
- 
-    /* coluna 1: instrucao assembly (~24 chars)
-       coluna 2: descricao da operacao         */
- 
+
+
     if (opcode == 0x0)
     {
-        if (funct == 0x0)
-            printf("  add $r%d, $r%d, $r%d\t\t| R%d = R%d + R%d\n",
-                   rd, rs, rt, rd, rs, rt);
- 
+
+        if(funct == 0x0)
+        {
+
+            //printf("add $r%d, $r%d, $r%d", rd, rs, rt);
+
+            printf("  add $r%d, $r%d, $r%d\t\t| R%d = R%d + R%d\n",rd, rs, rt, rd, rs, rt);
+
+        }
+
         else if (funct == 0x2)
-            printf("  sub $r%d, $r%d, $r%d\t\t| R%d = R%d - R%d\n",
-                   rd, rs, rt, rd, rs, rt);
- 
-        else if (funct == 0x4)
-            printf("  and $r%d, $r%d, $r%d\t\t| R%d = R%d AND R%d\n",
-                   rd, rs, rt, rd, rs, rt);
- 
-        else if (funct == 0x5)
-            printf("  or  $r%d, $r%d, $r%d\t\t| R%d = R%d OR R%d\n",
-                   rd, rs, rt, rd, rs, rt);
- 
+        {
+
+             printf("  sub $r%d, $r%d, $r%d\t\t| R%d = R%d - R%d\n",rd, rs, rt, rd, rs, rt);
+
+        }
+
+        else if(funct == 0x4)
+        {
+
+             //printf("and $r%d, $r%d, $r%d", rd, rs, rt);
+
+             printf("  and $r%d, $r%d, $r%d\t\t| R%d = R%d AND R%d\n",rd, rs, rt, rd, rs, rt);
+
+        }
+
+        else if(funct == 0x5)
+        {
+
+             printf("  or  $r%d, $r%d, $r%d\t\t| R%d = R%d OR R%d\n",rd, rs, rt, rd, rs, rt);
+
+        }
+
+
         else
-            printf("  tipo_r funct=%d\t\t| operacao desconhecida\n", funct);
+        {
+
+            printf("tipo_r funct=%d $r%d, $r%d, $r%d", funct, rd, rs, rt);
+
+        }
+
     }
- 
+
     else if (opcode == 0x4)
-        printf("  addi $r%d, $r%d, %d\t\t| R%d = R%d + %d\n",
-               rt, rs, immx, rt, rs, immx);
- 
+    {
+
+        printf("  addi $r%d, $r%d, %d\t\t| R%d = R%d + %d\n",rt, rs, immx, rt, rs, immx);
+
+    }
+
     else if (opcode == 0xB)
-        printf("  lw   $r%d, %d($r%d)\t\t| R%d = Mem[R%d + %d]\n",
-               rt, immx, rs, rt, rs, immx);
- 
+    {
+
+        printf("  lw   $r%d, %d($r%d)\t\t| R%d = Mem[R%d + %d]\n",rt, immx, rs, rt, rs, immx);
+
+    }
+
     else if (opcode == 0xF)
-        printf("  sw   $r%d, %d($r%d)\t\t| Mem[R%d + %d] = R%d\n",
-               rt, immx, rs, rs, immx, rt);
- 
+    {
+
+        printf("  sw   $r%d, %d($r%d)\t\t| Mem[R%d + %d] = R%d\n",rt, immx, rs, rs, immx, rt);
+
+    }
+
     else if (opcode == 0x8)
-        printf("  beq  $r%d, $r%d, %d\t\t| se R%d == R%d entao PC = PC + %d\n",
-               rs, rt, immx, rs, rt, immx);
- 
+    {
+
+        printf("  beq  $r%d, $r%d, %d\t\t| se R%d == R%d entao PC = PC + 1 + %d\n",rs, rt, immx, rs, rt, immx);
+
+    }
+
     else if (opcode == 0x2)
-        printf("  j    %d\t\t\t| PC = %d\n",
-               addr, addr);
- 
-    else if (instr == 0x0)
-        printf("  ---\t\t\t\t| (vazio)\n");
- 
+    {
+
+       printf("  j    %d\t\t\t| PC = %d\n",addr, addr);
+
+    }
+
     else
+    {
+
         printf("  op_0x%X\t\t\t| instrucao desconhecida\n", opcode);
+
+    }
+
+    printf("\n");
 }
 
+//print na tela pode e usa algo mais informativo, ao inves do assembly "cru"
 
 void print_program(instro *mem, int tamanho)
 {
@@ -74,14 +121,13 @@ void print_program(instro *mem, int tamanho)
     for (int i = 0; i < tamanho; i++)
     {
 
-        if (mem->instc[i] != 0 || i < mem->n)
-        {
+
 
             printf("  %3d: ", i);
 
             print_asm(mem->instc[i]);
 
-        }
+
 
     }
 

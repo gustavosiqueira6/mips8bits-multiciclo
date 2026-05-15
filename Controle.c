@@ -2,23 +2,51 @@
 #include <stdlib.h>
 #include "Head.h"
 
-static void limpa_sinais(int Sinais[16])
+void print_sinais(int Sinais[16])
 {
+    printf("Sinais:\n");
 
-    for (int i = 0; i < 16; i++)
-    {
+    printf("REG_DST=%d\n", Sinais[REG_DST]);
 
-        Sinais[i] = 0;
+    printf("JUMP=%d\n", Sinais[JUMP]);
 
-    }
+    printf("MEM_READ=%d\n", Sinais[MEM_READ]);
+
+    printf("MEM_WRITE=%d\n", Sinais[MEM_WRITE]);
+
+    printf("BRANCH=%d\n", Sinais[BRANCH]);
+
+    printf("ALU_SRC=%d\n", Sinais[ALU_SRC]);
+
+    printf("MEM_TO_REG=%d\n", Sinais[MEM_TO_REG]);
+
+    printf("REG_WRITE=%d\n", Sinais[REG_WRITE]);
+
+    printf("IorD=%d\n", Sinais[IorD]);
+
+    printf("IR_ESC=%d\n", Sinais[IR_ESC]);
+
+    printf("PC_ESC=%d\n", Sinais[PC_ESC]);
+
+    printf("PC_FONTE0=%d\n", Sinais[PC_FONTE0]);
+
+    printf("PC_FONTE1=%d\n", Sinais[PC_FONTE1]);
+
+    printf("ULA_FONTE_A=%d\n", Sinais[ULA_FONTE_A]);
+
+    printf("ULA_FONTE_B0=%d\n", Sinais[ULA_FONTE_B0]);
+
+    printf("ULA_FONTE_B1=%d\n", Sinais[ULA_FONTE_B1]);
 
 }
 
 
-void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, int Sinais[16])
+
+
+void Decodifica_estado(int estado, int Sinais[16])
 {
 
-    limpa_sinais(Sinais);
+
 
     switch (estado)
     {
@@ -28,7 +56,7 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[PC_ESC] = 1;
 
-            Sinais[IouD] = 0;
+            Sinais[IorD] = 0;
 
             Sinais[IR_ESC] = 1;
 
@@ -44,7 +72,16 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[REG_DST] = 1;
 
-            printf("  Sinais: PCEsc=1 IouD=0 IRESc=1 ULAFonteB=01 ULAFonteA=0 (soma)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            print_sinais(Sinais);
+
 
             break;
 
@@ -57,9 +94,21 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 1;
 
-            Sinais[REG_DST]     = 1;
+            Sinais[REG_DST]= 1;
 
-            printf("  Sinais: ULAFonteA=0 ULAFonteB=10 (soma para branch)\n");
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -72,13 +121,25 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[REG_DST]     = 0;
 
-            printf("  Sinais: ULAFonteA=1 ULAFonteB=10 (soma para endereco)\n");
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
         case 3:
 
-            Sinais[IouD] = 1;
+            Sinais[IorD] = 1;
 
             Sinais[MEM_READ] = 1;
 
@@ -88,7 +149,17 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 1;
 
-            printf("  Sinais: IouD=1 MEM_READ=1\n");
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -106,13 +177,23 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 1;
 
-            printf("  Sinais: EscReg=1 MemParaReg=1 RegDst=0 (lw concluido)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
         case 5:
 
-            Sinais[IouD] = 1;
+            Sinais[IorD] = 1;
 
             Sinais[MEM_WRITE] = 1;
 
@@ -122,7 +203,17 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 1;
 
-            printf("  Sinais: IouD=1 EscMem=1 (sw concluido)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -140,7 +231,17 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 1;
 
-            printf("  Sinais: EscReg=1 MemParaReg=0 RegDst=0 (addi concluido)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -155,7 +256,19 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[REG_DST]= 1;
 
-            printf("  Sinais: ULAFonteA=1 ULAFonteB=00 ULAop=funct(%d)\n", funct);
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -174,7 +287,17 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[ULA_FONTE_B1]= 0;
 
-            printf("  Sinais: EscReg=1 MemParaReg=0 RegDst=1 (tipo R concluido)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
@@ -194,7 +317,18 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
             Sinais[PC_FONTE1] = 0;
 
 
-            printf("  Sinais: Branch=1 ULAFonteA=1 ULAFonteB=00 FontePC=01 (sub)\n");
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            Sinais[PC_ESC] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+
+            print_sinais(Sinais);
 
             break;
 
@@ -209,13 +343,24 @@ void Decodifica_estado(int estado, unsigned char opcode, unsigned char funct, in
 
             Sinais[REG_DST]= 1;
 
-            printf("  Sinais: PCEsc=1 FontePC=10 (jump)\n");
+
+            Sinais[MEM_READ] = 0;
+
+            Sinais[MEM_WRITE] = 0;
+
+            Sinais[REG_WRITE] = 0;
+
+            Sinais[BRANCH] = 0;
+
+            Sinais[IR_ESC] = 0;
+
+            print_sinais(Sinais);
 
             break;
 
         default:
 
-            printf("  [CONTROLE] Estado invalido: %d\n", estado);
+            printf(" Erro de estado", estado);
 
             break;
 
@@ -337,7 +482,7 @@ int proximo_estado(int estado_atual, unsigned char opcode)
 
         default:
 
-            printf("  [CONTROLE] Estado invalido %d em proximo_estado()\n", estado_atual);
+            printf("  Erro de estado \n", estado_atual);
 
             return 0;
 
