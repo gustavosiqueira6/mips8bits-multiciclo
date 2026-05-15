@@ -62,11 +62,14 @@ typedef struct {
 
     unsigned char  PC;
 
+    unsigned short memoria[256]; 
+
     int estado;
 
     int n_ciclo;
 
     int n_instr;
+
 
 } Snapshot;
 

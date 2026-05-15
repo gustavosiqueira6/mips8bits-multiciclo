@@ -3,7 +3,7 @@
 #include "Head.h"
 
 
-void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULA_saida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr)
+void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULA_saida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr, instro *mem)
 {
     if (*sp >= 499)
     {
@@ -44,6 +44,11 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
     }
 
+    for(int i = 0; i < 256; i++)
+    {
+        s->memoria[i] = mem->instc[i];
+    }
+
 
 
     s->ULAop    = ULAop;
@@ -70,7 +75,7 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
 }
 
-void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULA_saida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr)
+void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULA_saida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr, instro *mem)
 {
     if (*sp < 0)
     {
@@ -107,6 +112,11 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
 
     }
 
+    for(int i = 0; i < 256; i++)
+    {
+        mem->instc[i] = s->memoria[i];
+    }
+
 
     *ULAop    = s->ULAop;
 
@@ -129,6 +139,7 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
     *n_ciclo  = s->n_ciclo;
 
     *n_instr  = s->n_instr;
+
 
     printf("  [BACK] Ciclo %d | PC=%d | Estado=%d  ->  Ciclo %d | PC=%d | Estado=%d\n",ciclo_antes, pc_antes, est_antes,*n_ciclo, *PC, *estado);
 }

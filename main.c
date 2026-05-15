@@ -8,10 +8,6 @@
     #include <commdlg.h>
 #endif
 
-/* ================================================================== */
-/*  Utilitarios de interface                                           */
-/* ================================================================== */
-
 static void linha(char c, int n)
 {
     for (int i = 0; i < n; i++) printf("%c", c);
@@ -31,10 +27,7 @@ static void secao(const char *txt)
     printf("\n  -- %s --\n", txt);
 }
 
-/* ================================================================== */
-/*  Selecao de arquivo                                                 */
-/* ================================================================== */
-
+//seleçao do arquivo
 void selecionar_arquivo(char *caminho)
 {
 #ifdef _WIN32
@@ -367,7 +360,7 @@ int main(void)
                 {
                     push_multi(pilha, &sp, reg, Sinais, ULAop, overflow,
                                (signed char)ULASaida, RDM, regA, regB,
-                               RI, PC, estado, n_ciclo, n_instr);
+                               RI, PC, estado, n_ciclo, n_instr, &mem_unificada);
 
                     int concluiu = executa_ciclo(&mem_unificada, reg, Sinais,
                                                  &estado, &PC, &RI, &RDM,
@@ -408,7 +401,7 @@ int main(void)
 
                 push_multi(pilha, &sp, reg, Sinais, ULAop, overflow,
                            (signed char)ULASaida, RDM, regA, regB,
-                           RI, PC, estado, n_ciclo, n_instr);
+                           RI, PC, estado, n_ciclo, n_instr, &mem_unificada);
 
                 {
                     int concluiu = executa_ciclo(&mem_unificada, reg, Sinais,
@@ -442,7 +435,7 @@ int main(void)
                 titulo("BACK — DESFAZER ULTIMO CICLO");
                 pop_multi(pilha, &sp, reg, Sinais, &ULAop, &overflow,
                           &ULASaida, &RDM, &regA, &regB,
-                          &RI, &PC, &estado, &n_ciclo, &n_instr);
+                          &RI, &PC, &estado, &n_ciclo, &n_instr, &mem_unificada);
                 printf("  Estado restaurado com sucesso.\n");
                 printf("  PC = %d  |  Estado FSM = %d  |  Ciclo = %d\n",
                        PC, estado, n_ciclo);
