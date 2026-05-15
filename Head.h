@@ -130,9 +130,9 @@ unsigned char jump(unsigned char addr);
 unsigned char branch(unsigned char PC, unsigned char imm);
 
 
-void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr);
+void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr, instro *mem);
 
-void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr);
+void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr, instro *mem);
 
 
 void print_bin(unsigned short x);

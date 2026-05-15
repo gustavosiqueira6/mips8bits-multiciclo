@@ -2,33 +2,33 @@
 #define HEAD_H
 
 /* ==========================================================================
-   HEAD.H — Mini MIPS 8 bits Multiciclo
+   HEAD.H ï¿½ Mini MIPS 8 bits Multiciclo
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Struct de memória unificada
-   [0-127]   = instruções (16 bits cada posição)
+   Struct de memï¿½ria unificada
+   [0-127]   = instruï¿½ï¿½es (16 bits cada posiï¿½ï¿½o)
    [128-255] = dados      (8 bits usados, armazenados em unsigned short)
    -------------------------------------------------------------------------- */
 typedef struct {
     unsigned short instc[256];
-    int n;   /* número de instruções carregadas */
+    int n;   /* nï¿½mero de instruï¿½ï¿½es carregadas */
 } instro;
 
 /* --------------------------------------------------------------------------
-   Índices dos sinais de controle no vetor Sinais[16]
+   ï¿½ndices dos sinais de controle no vetor Sinais[16]
    -------------------------------------------------------------------------- */
 typedef enum {
     REG_DST      = 0,   /* 1: destino = rd (tipo R); 0: destino = rt (tipo I)  */
-    JUMP         = 1,   /* 1: instrução é jump (não mais usado diretamente)     */
-    MEM_READ     = 2,   /* 1: habilita leitura da memória                      */
-    MEM_WRITE    = 3,   /* 1: habilita escrita na memória                      */
-    BRANCH       = 4,   /* 1: instrução é beq                                  */
-    ALU_SRC      = 5,   /* 1: 2ª entrada da ULA = imediato; 0: = regB          */
-    MEM_TO_REG   = 6,   /* 1: dado escrito no reg vem da memória; 0: da ULA    */
+    JUMP         = 1,   /* 1: instruï¿½ï¿½o ï¿½ jump (nï¿½o mais usado diretamente)     */
+    MEM_READ     = 2,   /* 1: habilita leitura da memï¿½ria                      */
+    MEM_WRITE    = 3,   /* 1: habilita escrita na memï¿½ria                      */
+    BRANCH       = 4,   /* 1: instruï¿½ï¿½o ï¿½ beq                                  */
+    ALU_SRC      = 5,   /* 1: 2ï¿½ entrada da ULA = imediato; 0: = regB          */
+    MEM_TO_REG   = 6,   /* 1: dado escrito no reg vem da memï¿½ria; 0: da ULA    */
     REG_WRITE    = 7,   /* 1: habilita escrita no banco de registradores        */
-    IouD         = 8,   /* 1: endereço da mem = ULASaida; 0: = PC              */
-    IR_ESC       = 9,   /* 1: habilita escrita no Registrador de Instrução      */
+    IouD         = 8,   /* 1: endereï¿½o da mem = ULASaida; 0: = PC              */
+    IR_ESC       = 9,   /* 1: habilita escrita no Registrador de Instruï¿½ï¿½o      */
     PC_ESC       = 10,  /* 1: habilita escrita no PC                           */
     PC_FONTE0    = 11,  /* bit 0 da fonte do PC                                */
     PC_FONTE1    = 12,  /* bit 1 da fonte do PC                                */
@@ -39,7 +39,7 @@ typedef enum {
 } SinalControle;
 
 /* --------------------------------------------------------------------------
-   Snapshot — estado completo do simulador em um ciclo de clock
+   Snapshot ï¿½ estado completo do simulador em um ciclo de clock
    Usado pelo back (desfazer um ciclo)
    -------------------------------------------------------------------------- */
 typedef struct {
@@ -59,7 +59,7 @@ typedef struct {
 } Snapshot;
 
 /* ==========================================================================
-   ASSINATURAS DAS FUNÇÕES
+   ASSINATURAS DAS FUNï¿½ï¿½ES
    ========================================================================== */
 
 /* --- banco_registradores.c --- */
@@ -108,7 +108,7 @@ void        push_multi(Snapshot *pilha, int *sp,
                        signed char ULASaida, signed char RDM,
                        signed char regA, signed char regB,
                        unsigned short RI, unsigned char PC,
-                       int estado, int n_ciclo, int n_instr);
+                       int estado, int n_ciclo, int n_instr, instro *mem);
 
 void        pop_multi(Snapshot *pilha, int *sp,
                       signed char reg[], int Sinais[16],
@@ -116,9 +116,9 @@ void        pop_multi(Snapshot *pilha, int *sp,
                       signed char *ULASaida, signed char *RDM,
                       signed char *regA, signed char *regB,
                       unsigned short *RI, unsigned char *PC,
-                      int *estado, int *n_ciclo, int *n_instr);
+                      int *estado, int *n_ciclo, int *n_instr, instro *mem);
 
-/* --- main.c (helpers internos expostos para impressão) --- */
+/* --- main.c (helpers internos expostos para impressï¿½o) --- */
 void        print_bin(unsigned short x);
 void        print_bin8(unsigned char x);
 
