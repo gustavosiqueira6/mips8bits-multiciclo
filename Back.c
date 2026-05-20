@@ -3,7 +3,7 @@
 #include "Head.h"
 
 
-void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULA_saida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr, instro *mem)
+void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int ULAop,int overflow,signed char ULA_saida,signed char RDM,signed char regA,signed char regB,unsigned short RI,unsigned char  PC,int estado,int n_ciclo,int n_instr, instro *mem, instrucoes contaInstrucoes)
 {
     if (*sp >= 499)
     {
@@ -73,9 +73,17 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
     s->n_instr  = n_instr;
 
+    s->tipoR = contaInstrucoes.tipoR;
+    s->addi = contaInstrucoes.addi;
+    s->lw = contaInstrucoes.lw;
+    s->sw = contaInstrucoes.sw;
+    s->beq = contaInstrucoes.beq;
+    s->jump = contaInstrucoes.jump;
+
+
 }
 
-void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULA_saida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr, instro *mem)
+void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *ULAop,int *overflow,signed char *ULA_saida,signed char *RDM,signed char *regA,signed char *regB,unsigned short *RI,unsigned char *PC,int *estado,int *n_ciclo,int *n_instr, instro *mem, instrucoes *contaInstrucoes)
 {
     if (*sp < 0)
     {
@@ -139,6 +147,13 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
     *n_ciclo  = s->n_ciclo;
 
     *n_instr  = s->n_instr;
+
+    contaInstrucoes->tipoR = s->tipoR;
+    contaInstrucoes->addi = s->addi;
+    contaInstrucoes->lw = s->lw;
+    contaInstrucoes->sw = s->sw;
+    contaInstrucoes->beq = s->beq;
+    contaInstrucoes->jump = s->jump;
 
 
     printf("  [BACK] Ciclo %d | PC=%d | Estado=%d  ->  Ciclo %d | PC=%d | Estado=%d\n",ciclo_antes, pc_antes, est_antes,*n_ciclo, *PC, *estado);

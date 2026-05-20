@@ -28,7 +28,7 @@ typedef enum {
     ALU_SRC      = 5,
     MEM_TO_REG   = 6,
     REG_WRITE    = 7,
-    IouD         = 8,
+    IorD         = 8,
     IR_ESC       = 9,
     PC_ESC       = 10,
     PC_FONTE0    = 11,
@@ -70,8 +70,30 @@ typedef struct {
 
     int n_instr;
 
+    int tipoR;
+
+    int addi;
+
+    int lw;
+
+    int sw;
+
+    int jump;
+    
+    int beq;
+
+
 
 } Snapshot;
+
+typedef struct{
+    int tipoR;
+    int addi;
+    int lw;
+    int sw;
+    int jump;
+    int beq;
+}instrucoes;
 
 
 
@@ -100,7 +122,7 @@ void tipo(int ULAop);
 void Tipo2(unsigned char opcode, int *ULAop);
 
 
-void Decodifica_estado(int estado, unsigned char opcode,unsigned char funct, int *Sinais);
+void Decodifica_estado(int estado, int Sinais[16]);
 
 int proximo_estado(int estado_atual, unsigned char opcode);
 
@@ -130,9 +152,9 @@ unsigned char jump(unsigned char addr);
 unsigned char branch(unsigned char PC, unsigned char imm);
 
 
-void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr, instro *mem);
+void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr, instro *mem, instrucoes contaInstrucoes);
 
-void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr, instro *mem);
+void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr, instro *mem, instrucoes *contaInstrucoes);
 
 
 void print_bin(unsigned short x);

@@ -27,6 +27,94 @@ static void secao(const char *txt)
     printf("\n  -- %s --\n", txt);
 }
 
+void incrementaInstr(instrucoes *contaInstrucoes, unsigned char opcode, unsigned char funct){
+    switch (opcode)
+    {
+        case 0x0:                    // add, sub, and, or * 4
+            contaInstrucoes->tipoR++;
+            break;
+
+        case 0x4:   // addi * 4
+            contaInstrucoes->addi++;
+            break;
+        case 0xB:    // lw * 5
+            contaInstrucoes->lw++;
+            break;
+        case 0xF:                    // sw * 4
+            contaInstrucoes->sw++;
+            break;
+
+        case 0x8:                    // beq * 3
+            contaInstrucoes->beq++;
+            break;
+            
+        case 0x2:                    // jump * 3
+            contaInstrucoes->jump++;
+            break;
+
+    }
+
+}
+
+void printEstatisticas(instrucoes contaInstrucoes){
+    printf("%-15s %-15s %-20s %-10s\n",
+                "INSTRUCAO",
+                "QUANTIDADE",
+                "QTD CICLOS",
+                "TOTAL");
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "tipoR",
+                contaInstrucoes.tipoR,
+                4,
+                contaInstrucoes.tipoR*4);
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "Addi",
+                contaInstrucoes.addi,
+                4,
+                contaInstrucoes.addi*4);
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "LW",
+                contaInstrucoes.lw,
+                5,
+                contaInstrucoes.lw*5);
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "SW",
+                contaInstrucoes.sw,
+                4,
+                contaInstrucoes.sw*4);
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "BEQ",
+                contaInstrucoes.beq,
+                3,
+                contaInstrucoes.beq*3);
+
+                printf("%-15s %-15d %-20d %-10d\n",
+                "jump",
+                contaInstrucoes.jump,
+                3,
+                contaInstrucoes.jump*3);
+                
+                int somaTotal =
+                contaInstrucoes.tipoR * 4 +
+                contaInstrucoes.addi * 4 +
+                contaInstrucoes.lw * 5 +
+                contaInstrucoes.sw * 4 +
+                contaInstrucoes.beq * 3 +
+                contaInstrucoes.jump * 3;
+
+            printf("\n%-15s %-15s %-20s %-10d\n",
+                "TOTAL GERAL",
+                "",
+                "",
+                somaTotal);
+
+}
+
 //seleçao do arquivo
 void selecionar_arquivo(char *caminho)
 {
@@ -82,7 +170,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
                   int *estado, unsigned char *PC, unsigned short *RI,
                   signed char *RDM, signed char *regA, signed char *regB,
                   signed char *ULASaida, int *ULAop, int *overflow,
-                  int *zero, int *n_ciclo)
+                  int *zero, int *n_ciclo, instrucoes *contaInstrucoes)
 {
     (*n_ciclo)++;
 
@@ -98,6 +186,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
     Estender(imm6, &immx);
     print_estado(*estado);
     Decodifica_estado(*estado, Sinais);
+    incrementaInstr(contaInstrucoes, opcode, funct);
 
     int instrucao_concluida = 0;
 
@@ -112,6 +201,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             *PC = busca(*PC);
             printf("    PC  <- %d  (incrementado para proxima instrucao)\n", *PC);
             *estado = 1;
+
             break;
 
         case 1:
@@ -235,6 +325,7 @@ int main(void)
 {
     instro        mem_unificada = {0};
     signed char   reg[8];
+    instrucoes contaInstrucoes;
     iniat(reg);
     int           Sinais[16]  = {0};
     unsigned short RI         = 0;
@@ -332,7 +423,13 @@ int main(void)
                 printf(" RegB      │ %4d\n", regB);
                 printf(" ULASaida  │ %4d\n", ULASaida);
 
+                printf("----------------------------------------------------\n");
+                
+                printEstatisticas(contaInstrucoes);
+                
                 printf("====================================================\n");
+
+                
 
                 print_regs(reg);
                 print_mem_unificada(&mem_unificada);
@@ -360,13 +457,13 @@ int main(void)
                 {
                     push_multi(pilha, &sp, reg, Sinais, ULAop, overflow,
                                (signed char)ULASaida, RDM, regA, regB,
-                               RI, PC, estado, n_ciclo, n_instr, &mem_unificada);
+                               RI, PC, estado, n_ciclo, n_instr, &mem_unificada, contaInstrucoes);
 
                     int concluiu = executa_ciclo(&mem_unificada, reg, Sinais,
                                                  &estado, &PC, &RI, &RDM,
                                                  &regA, &regB, &ULASaida,
                                                  &ULAop, &overflow, &zero,
-                                                 &n_ciclo);
+                                                 &n_ciclo, &contaInstrucoes);
                     if (concluiu)
                     {
                         n_instr++;
@@ -401,14 +498,14 @@ int main(void)
 
                 push_multi(pilha, &sp, reg, Sinais, ULAop, overflow,
                            (signed char)ULASaida, RDM, regA, regB,
-                           RI, PC, estado, n_ciclo, n_instr, &mem_unificada);
+                           RI, PC, estado, n_ciclo, n_instr, &mem_unificada, contaInstrucoes);
 
                 {
                     int concluiu = executa_ciclo(&mem_unificada, reg, Sinais,
                                                  &estado, &PC, &RI, &RDM,
                                                  &regA, &regB, &ULASaida,
                                                  &ULAop, &overflow, &zero,
-                                                 &n_ciclo);
+                                                 &n_ciclo, &contaInstrucoes);
                     if (concluiu)
                     {
                         n_instr++;
@@ -435,7 +532,7 @@ int main(void)
                 titulo("BACK — DESFAZER ULTIMO CICLO");
                 pop_multi(pilha, &sp, reg, Sinais, &ULAop, &overflow,
                           &ULASaida, &RDM, &regA, &regB,
-                          &RI, &PC, &estado, &n_ciclo, &n_instr, &mem_unificada);
+                          &RI, &PC, &estado, &n_ciclo, &n_instr, &mem_unificada, &contaInstrucoes);
                 printf("  Estado restaurado com sucesso.\n");
                 printf("  PC = %d  |  Estado FSM = %d  |  Ciclo = %d\n",
                        PC, estado, n_ciclo);
