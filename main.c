@@ -186,7 +186,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
     Estender(imm6, &immx);
     print_estado(*estado);
     Decodifica_estado(*estado, Sinais);
-    incrementaInstr(contaInstrucoes, opcode, funct);
+    
 
     int instrucao_concluida = 0;
 
@@ -200,6 +200,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             printf(" (0x%04X)\n", *RI);
             *PC = busca(*PC);
             printf("    PC  <- %d  (incrementado para proxima instrucao)\n", *PC);
+            incrementaInstr(contaInstrucoes, opcode, funct);
             *estado = 1;
 
             break;
