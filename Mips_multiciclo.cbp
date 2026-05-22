@@ -31,6 +31,40 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add library="comdlg32" />
+		</Linker>
+		<Unit filename="Assembly.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Back.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Controle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Head.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Head.h" />
+		<Unit filename="Memoria.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="PC.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Reg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ULA.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="bin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

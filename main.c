@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Head.h"
+#include <locale.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -47,7 +48,7 @@ void incrementaInstr(instrucoes *contaInstrucoes, unsigned char opcode, unsigned
         case 0x8:                    // beq * 3
             contaInstrucoes->beq++;
             break;
-            
+
         case 0x2:                    // jump * 3
             contaInstrucoes->jump++;
             break;
@@ -98,7 +99,7 @@ void printEstatisticas(instrucoes contaInstrucoes){
                 contaInstrucoes.jump,
                 3,
                 contaInstrucoes.jump*3);
-                
+
                 int somaTotal =
                 contaInstrucoes.tipoR * 4 +
                 contaInstrucoes.addi * 4 +
@@ -170,7 +171,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
                   int *estado, unsigned char *PC, unsigned short *RI,
                   signed char *RDM, signed char *regA, signed char *regB,
                   signed char *ULASaida, int *ULAop, int *overflow,
-                  int *zero, int *n_ciclo, instrucoes *contaInstrucoes)
+                  int *zero, int *n_ciclo,instrucoes *contaInstrucoes)
 {
     (*n_ciclo)++;
 
@@ -186,7 +187,6 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
     Estender(imm6, &immx);
     print_estado(*estado);
     Decodifica_estado(*estado, Sinais);
-    
 
     int instrucao_concluida = 0;
 
@@ -200,9 +200,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             printf(" (0x%04X)\n", *RI);
             *PC = busca(*PC);
             printf("    PC  <- %d  (incrementado para proxima instrucao)\n", *PC);
-            incrementaInstr(contaInstrucoes, opcode, funct);
             *estado = 1;
-
             break;
 
         case 1:
@@ -248,6 +246,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             printf("    R%d  <- RDM = %d  [lw concluido]\n", rt, *RDM);
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         case 5:
@@ -257,6 +256,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
                    (unsigned char)*ULASaida , rt, *regB);
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         case 6:
@@ -265,6 +265,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             printf("    R%d  <- ULA_saida = %d  [addi concluido]\n", rt, *ULASaida);
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         case 7:
@@ -285,6 +286,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
                 printf("  ! ATENCAO: overflow detectado!\n");
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         case 9:
@@ -302,6 +304,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             }
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         case 10:
@@ -310,6 +313,7 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
             printf("    PC  <- %d  [jump concluido]\n", *PC);
             *estado = 0;
             instrucao_concluida = 1;
+            incrementaInstr(contaInstrucoes, opcode, funct);
             break;
 
         default:
@@ -324,6 +328,13 @@ int executa_ciclo(instro *mem, signed char reg[8], int Sinais[16],
 
 int main(void)
 {
+
+    #ifdef _WIN32
+        SetConsoleOutputCP(65001);
+        SetConsoleCP(65001);
+    #endif
+    setlocale(LC_ALL, ".UTF-8");
+
     instro        mem_unificada = {0};
     signed char   reg[8];
     instrucoes contaInstrucoes;
@@ -424,13 +435,13 @@ int main(void)
                 printf(" RegB      │ %4d\n", regB);
                 printf(" ULASaida  │ %4d\n", ULASaida);
 
-                printf("----------------------------------------------------\n");
-                
-                printEstatisticas(contaInstrucoes);
-                
                 printf("====================================================\n");
 
-                
+                printf("----------------------------------------------------\n");
+
+                printEstatisticas(contaInstrucoes);
+
+                printf("====================================================\n");
 
                 print_regs(reg);
                 print_mem_unificada(&mem_unificada);
@@ -464,7 +475,7 @@ int main(void)
                                                  &estado, &PC, &RI, &RDM,
                                                  &regA, &regB, &ULASaida,
                                                  &ULAop, &overflow, &zero,
-                                                 &n_ciclo, &contaInstrucoes);
+                                                 &n_ciclo,&contaInstrucoes);
                     if (concluiu)
                     {
                         n_instr++;
@@ -479,11 +490,13 @@ int main(void)
                         linha('*', 56);
                     }
 
-                    if (n_ciclo > 10000)
+                    /*if (n_ciclo > 10000)
                     {
                         printf("\n  ! Limite de 10000 ciclos atingido. Execucao interrompida.\n");
                         break;
                     }
+
+                    */
                 }
 
                 titulo("FIM DO PROGRAMA");
@@ -494,19 +507,19 @@ int main(void)
 
             case 9:
                 titulo("STEP — EXECUTAR UM CICLO");
-                printf("  Ciclo: %d  |  PC: %d  |  Estado FSM: %d\n",
-                       n_ciclo + 1, PC, estado);
+
+                printf("  Ciclo: %d  |  PC: %d  |  Estado FSM: %d\n",n_ciclo + 1, PC, estado);
 
                 push_multi(pilha, &sp, reg, Sinais, ULAop, overflow,
                            (signed char)ULASaida, RDM, regA, regB,
-                           RI, PC, estado, n_ciclo, n_instr, &mem_unificada, contaInstrucoes);
+                           RI, PC, estado, n_ciclo, n_instr, &mem_unificada,contaInstrucoes);
 
                 {
                     int concluiu = executa_ciclo(&mem_unificada, reg, Sinais,
                                                  &estado, &PC, &RI, &RDM,
                                                  &regA, &regB, &ULASaida,
                                                  &ULAop, &overflow, &zero,
-                                                 &n_ciclo, &contaInstrucoes);
+                                                 &n_ciclo,&contaInstrucoes);
                     if (concluiu)
                     {
                         n_instr++;
@@ -523,6 +536,14 @@ int main(void)
                 }
 
                 secao("Registradores apos o ciclo");
+                   printf(" RI        │ ");
+                print_bin(RI);
+                printf(" │ 0x%04X\n", RI);
+                printf(" RDM       │ %4d\n", RDM);
+                printf(" RegA      │ %4d\n", regA);
+                printf(" RegB      │ %4d\n", regB);
+                printf(" ULASaida  │ %4d\n", ULASaida);
+
                 for (int i = 0; i < 8; i++)
                     printf("  R%d = %d\n", i, reg[i]);
                 printf("\n  PC = %d  |  Estado FSM = %d\n", PC, estado);
@@ -533,7 +554,7 @@ int main(void)
                 titulo("BACK — DESFAZER ULTIMO CICLO");
                 pop_multi(pilha, &sp, reg, Sinais, &ULAop, &overflow,
                           &ULASaida, &RDM, &regA, &regB,
-                          &RI, &PC, &estado, &n_ciclo, &n_instr, &mem_unificada, &contaInstrucoes);
+                          &RI, &PC, &estado, &n_ciclo, &n_instr, &mem_unificada,&contaInstrucoes);
                 printf("  Estado restaurado com sucesso.\n");
                 printf("  PC = %d  |  Estado FSM = %d  |  Ciclo = %d\n",
                        PC, estado, n_ciclo);

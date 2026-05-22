@@ -73,13 +73,14 @@ void push_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int UL
 
     s->n_instr  = n_instr;
 
+
+
     s->tipoR = contaInstrucoes.tipoR;
     s->addi = contaInstrucoes.addi;
     s->lw = contaInstrucoes.lw;
     s->sw = contaInstrucoes.sw;
     s->beq = contaInstrucoes.beq;
     s->jump = contaInstrucoes.jump;
-
 
 }
 
@@ -147,6 +148,7 @@ void pop_multi(Snapshot *pilha,int *sp,signed char reg[8],int Sinais[16],int *UL
     *n_ciclo  = s->n_ciclo;
 
     *n_instr  = s->n_instr;
+
 
     contaInstrucoes->tipoR = s->tipoR;
     contaInstrucoes->addi = s->addi;

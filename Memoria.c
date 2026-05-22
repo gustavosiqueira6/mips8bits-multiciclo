@@ -3,6 +3,8 @@
 #include <string.h>
 #include "Head.h"
 
+// mostrar registratadores não visiveis ao programador pc, ab, alout, , memoria
+
 int carregar_unificado(instro *mem, const char *nome_arquivo)
 {
 
@@ -17,6 +19,7 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
     }
 
+
     for (int i = 0; i < 256; i++)
     {
 
@@ -26,18 +29,22 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
     mem->n = 0;
 
-    char buffer[18];
+    char buffer[32];
 
+    //para instruções
     int pos_inst = 0;
 
+    //para dados
     int pos_dado = 128;
 
+    //mudou de memoria
     int na_area_dados = 0;
 
     while (fgets(buffer, sizeof(buffer), arquivo))
     {
 
         buffer[strcspn(buffer, "\r\n")] = '\0';
+
 
         if (strlen(buffer) == 0)
         {
@@ -46,11 +53,13 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
         }
 
+
+
         if (strcmp(buffer, ".data") == 0)
         {
             na_area_dados = 1;
 
-            printf("  [MEMORIA] Marcador .data encontrado � dados a partir de %d\n",pos_dado);
+            printf("  [MEMORIA] Marcador .data encontrado — dados a partir de %d\n",pos_dado);
 
             continue;
 
@@ -59,10 +68,11 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
         if (!na_area_dados)
         {
 
+
             if (pos_inst >= 128)
             {
 
-                printf("  [MEMORIA] Aviso: mais de 128 instrucoes � ignorando excesso\n");
+                printf("  [MEMORIA] Aviso: mais de 128 instrucoes — ignorando excesso\n");
 
                 continue;
 
@@ -92,7 +102,7 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
                 if (endereco < 128 || endereco > 255)
                 {
-                    printf("  [MEMORIA] Aviso: endereco de dado invalido %d � ignorando\n",endereco);
+                    printf("  [MEMORIA] Aviso: endereco de dado invalido %d — ignorando\n",endereco);
 
                     continue;
                 }
@@ -106,11 +116,12 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
                 if (pos_dado > 255)
                 {
-                    printf("  [MEMORIA] Aviso: area de dados cheia � ignorando excesso\n");
+                    printf("  [MEMORIA] Aviso: area de dados cheia — ignorando excesso\n");
 
                     continue;
 
                 }
+
 
                 mem->instc[pos_dado] = (unsigned short)strtol(buffer, NULL, 2);
 
@@ -124,6 +135,7 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
     }
 
+
     fclose(arquivo);
 
     printf("  [MEMORIA] Carregadas %d instrucoes.\n", mem->n);
@@ -132,17 +144,23 @@ int carregar_unificado(instro *mem, const char *nome_arquivo)
 
 }
 
+
 unsigned short ler_unificada(instro *mem, unsigned char endereco)
 {
+
+
 
     return mem->instc[endereco];
 
 }
 
+
 int Store(instro *mem, signed char endereco, signed char valor)
 {
 
     unsigned char end = (unsigned char)endereco;
+
+    /*
 
     if (end < 128)
     {
@@ -151,12 +169,14 @@ int Store(instro *mem, signed char endereco, signed char valor)
         return -1;
 
     }
+    */
 
     mem->instc[end] = (unsigned short)(unsigned char)valor;
 
     return 0;
 
 }
+
 
 void print_mem_unificada(instro *mem)
 {
@@ -168,24 +188,27 @@ void print_mem_unificada(instro *mem)
     printf(" END │ BINARIO                         │ HEXADECIMAL\n");
     printf("----------------------------------------------------\n");
 
+
+
     for (int i = 0; i < 128; i++)
     {
 
-        printf(" %3d │ ", i);
 
-        for (int b = 15; b >= 0; b--)
-        {
 
-            printf("%d", (mem->instc[i] >> b) & 1);
 
-            if (b == 12 || b == 8 || b == 4)
+            printf("  [%3d] ", i);
+
+            for (int b = 15; b >= 0; b--)
             {
-                printf(" ");
+
+                printf("%d", (mem->instc[i] >> b) & 1);
+
             }
 
-        }
 
-        printf(" │ 0x%04X\n", mem->instc[i]);
+            printf(" (0x%04X)\n", mem->instc[i]);
+
+
 
     }
 
@@ -202,29 +225,36 @@ void print_mem_unificada(instro *mem)
     for (int i = 128; i < 256; i++)
     {
 
-        unsigned char val8 = (unsigned char)mem->instc[i];
 
-        printf(" %3d │ ", i);
+            unsigned char val8 = (unsigned char)mem->instc[i];
 
-        for (int b = 7; b >= 0; b--)
-        {
+            printf("  [%3d] ", i);
 
-            printf("%d", (val8 >> b) & 1);
-
-            if (b == 4)
+            for (int b = 7; b >= 0; b--)
             {
-                printf(" ");
+
+                printf("%d", (val8 >> b) & 1);
+
+                if (b == 4)
+                {
+
+                    printf(" ");
+
+                }
+
             }
 
-        }
 
-        printf(" │ %4d\n", (signed char)val8);
+            printf(" (%d)\n", (signed char)val8);
+
+
 
     }
 
-    printf("====================================================\n");
+    printf("=====================================\n");
 
 }
+
 
 void save_mem_dat(instro *mem, const char *nome_arquivo)
 {
@@ -252,6 +282,7 @@ void save_mem_dat(instro *mem, const char *nome_arquivo)
 
         }
 
+
         fprintf(f, "\n");
 
     }
@@ -261,4 +292,3 @@ void save_mem_dat(instro *mem, const char *nome_arquivo)
     printf("Dados salvos em: %s\n", nome_arquivo);
 
 }
- 

@@ -8,34 +8,36 @@ typedef struct {
 } instro;
 
 typedef struct {
-    unsigned short RI;        // armazena a intruÃ§Ã£o
+    unsigned short RI;        // armazena a intrução
     signed char    A;         // armazena rs
     signed char    B;         // armazena rt
     int            ULA_saida; // saida da ULA
     signed char    RDM;       // dado lido na memoria (lw)
 } RegsInterm;
 
+
 void init_regs_interm(RegsInterm *rt);
 void print_regs_interm(RegsInterm *rt);
 
+
 typedef enum {
 
-    REG_DST      = 0,
-    JUMP         = 1,
-    MEM_READ     = 2,
-    MEM_WRITE    = 3,
-    BRANCH       = 4,
-    ALU_SRC      = 5,
-    MEM_TO_REG   = 6,
-    REG_WRITE    = 7,
-    IorD         = 8,
-    IR_ESC       = 9,
-    PC_ESC       = 10,
-    PC_FONTE0    = 11,
-    PC_FONTE1    = 12,
-    ULA_FONTE_A  = 13,
-    ULA_FONTE_B0 = 14,
-    ULA_FONTE_B1 = 15
+    REG_DST= 0,
+    JUMP= 1,
+    MEM_READ= 2,
+    MEM_WRITE= 3,
+    BRANCH= 4,
+    ALU_SRC= 5,
+    MEM_TO_REG= 6,
+    REG_WRITE= 7,
+    IorD= 8,
+    IR_ESC= 9,
+    PC_ESC= 10,
+    PC_FONTE0= 11,
+    PC_FONTE1= 12,
+    ULA_FONTE_A= 13,
+    ULA_FONTE_B0= 14,
+    ULA_FONTE_B1= 15
 
 } SinalControle;
 
@@ -62,7 +64,7 @@ typedef struct {
 
     unsigned char  PC;
 
-    unsigned short memoria[256]; 
+    unsigned short memoria[256];
 
     int estado;
 
@@ -79,12 +81,12 @@ typedef struct {
     int sw;
 
     int jump;
-    
+
     int beq;
 
 
-
 } Snapshot;
+
 
 typedef struct{
     int tipoR;
@@ -94,9 +96,6 @@ typedef struct{
     int jump;
     int beq;
 }instrucoes;
-
-
-
 
 void print_regs(signed char *reg);
 
@@ -122,7 +121,9 @@ void tipo(int ULAop);
 void Tipo2(unsigned char opcode, int *ULAop);
 
 
-void Decodifica_estado(int estado, int Sinais[16]);
+void print_sinais(int Sinais[16]);
+
+void Decodifica_estado(int estado, int *Sinais);
 
 int proximo_estado(int estado_atual, unsigned char opcode);
 
@@ -152,9 +153,9 @@ unsigned char jump(unsigned char addr);
 unsigned char branch(unsigned char PC, unsigned char imm);
 
 
-void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr, instro *mem, instrucoes contaInstrucoes);
+void push_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int ULAop, int overflow,signed char ULASaida, signed char RDM,signed char regA, signed char regB,unsigned short RI, unsigned char PC,int estado, int n_ciclo, int n_instr,instro *mem,instrucoes contaInstrucoes);
 
-void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr, instro *mem, instrucoes *contaInstrucoes);
+void pop_multi(Snapshot *pilha, int *sp,signed char *reg, int *Sinais,int *ULAop, int *overflow,signed char *ULASaida, signed char *RDM,signed char *regA, signed char *regB,unsigned short *RI, unsigned char *PC,int *estado, int *n_ciclo, int *n_instr,instro *mem,instrucoes *contaInstrucoes);
 
 
 void print_bin(unsigned short x);

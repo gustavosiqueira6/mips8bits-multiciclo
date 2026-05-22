@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "Head.h"
 
+
+
 void print_regs(signed char reg[8])
 {
 
@@ -24,6 +26,7 @@ void print_regs(signed char reg[8])
     }
 
     printf("=====================================\n");
+
 
 }
 
@@ -52,6 +55,7 @@ int read(signed char reg[8], signed char rs, signed char rt,signed char *outA, s
 
 }
 
+
 int Rdest(int Sinais[16], signed char rd, signed char rt)
 {
 
@@ -68,6 +72,7 @@ int esc(signed char reg[8], int dest, signed char valor, int RegWrite)
         reg[dest] = valor;
 
     }
+
 
     return 0;
 }

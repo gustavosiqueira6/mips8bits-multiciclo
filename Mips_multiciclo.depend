@@ -1,35 +1,35 @@
 # depslib dependency file v1.0
 1777698921 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\head.c
 
-1777701686 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\assembly.c
+1778875485 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\assembly.c
 	<stdio.h>
 	<stdlib.h>
 	"Head.h"
 
-1777705888 c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\head.h
+1779403145 c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\head.h
 
-1777702997 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\back.c
+1779402074 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\back.c
 	<stdio.h>
 	<stdlib.h>
 	"Head.h"
 
-1777705343 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\controle.c
+1778877358 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\controle.c
 	<stdio.h>
 	<stdlib.h>
 	"Head.h"
 
-1777706744 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\memoria.c
+1779473824 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\memoria.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"Head.h"
 
-1777701558 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\pc.c
+1778873292 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\pc.c
 	<stdio.h>
 	<stdlib.h>
 	"Head.h"
 
-1777702427 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\reg.c
+1778600800 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\reg.c
 	<stdio.h>
 	<stdlib.h>
 	"Head.h"
@@ -39,15 +39,16 @@
 	<stdlib.h>
 	"Head.h"
 
-1777700587 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\bin.c
+1778098465 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\bin.c
 	<stdio.h>
 	"Head.h"
 
-1777707629 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\main.c
+1779406023 source:c:\users\sandr\onedrive\햞ea de trabalho\mips_multiciclo\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"Head.h"
+	<locale.h>
 	<windows.h>
 	<commdlg.h>
 
